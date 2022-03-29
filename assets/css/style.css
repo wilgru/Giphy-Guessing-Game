@@ -1,0 +1,8 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.giphyImage {
+  margin: 1rem;
+}
