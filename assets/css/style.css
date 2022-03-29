@@ -39,3 +39,8 @@ td {
   background-color: var(--charcoal);
   color: var(--white);
 }
+
+.giphyImage {
+  margin: 1rem;
+}
+
