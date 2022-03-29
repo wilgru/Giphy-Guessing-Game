@@ -1,6 +1,43 @@
-.container {
+:root {
+  --charcoal: #36454f;
+  --bone: #f4e6d2;
+  --white: #fff;
+  --dark: #011f4b;
+  --navy: #03396c;
+  --royal: #005b96;
+  --turq: #6497b1;
+  --light: #b3cde0;
+  --gray: #d2d2cf;
+}
+
+* {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+th {
+  background-color: var(--charcoal);
+  color: var(--white);
+}
+
+td {
+  background-color: var(--gray);
+  color: var(--dark);
+}
+
+.centered-box {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+}
+
+.leaderboard {
+  background-color: var(--charcoal);
+  color: var(--white);
+}
+
+#play-again {
+  background-color: var(--charcoal);
+  color: var(--white);
 }
 
 .giphyImage {
