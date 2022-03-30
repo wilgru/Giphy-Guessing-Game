@@ -2,8 +2,8 @@
 const SCORE_POINTS = 10;
 const MAX_QUESTIONS = 3;
 const NUM_OF_GIFS_PER_QUESTION = 4;
-const WORDSAPI_API_KEY = "19b86261c7msheae50a00b3ebf7cp14c3e6jsn10112d0a7231";
-const GIPHY_API_KEY = "DrJYJBwC72NAoBTMVtMicogQEKk5DX6z";
+const WORDSAPI_API_KEY = API_KEYS.WORDS_API;
+const GIPHY_API_KEY = API_KEYS.GIPHY_API;
 
 var questions = [];
 var currentQuestion = {};
