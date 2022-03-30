@@ -120,20 +120,21 @@ function checkQuestionPopulation() {
         if (currGenQuestionGifs.length === 4) {
             clearInterval(checkInterval)
 
-            console.log('Loading Gifs for Question No.' + currGenQuestionIndex + " - 4/4 COMPLETE")
+            console.log('Question No.' + currGenQuestionIndex + " - COMPLETE")
             generatedQuestions[currGenQuestionIndex]["gifUrls"] = currGenQuestionGifs
             currGenQuestionIndex++
             addNextQuestion()
-        } else {
-            console.log('Loading Gifs for Question No.'+ currGenQuestionIndex + " - " + currGenQuestionGifs.length + "/4")
-        }
+        } 
+        // else {
+        //     console.log('Loading Gifs for Question No.'+ currGenQuestionIndex + " - " + currGenQuestionGifs.length + "/4")
+        // }
     }, 100)
 }
 
 //strt working on the next question to add to the list of questions
 function addNextQuestion() {
     if (currGenQuestionIndex < MAX_QUESTIONS) {
-        console.log("Generating question No." + currGenQuestionIndex + "...")
+        console.log("Generating question #" + currGenQuestionIndex + "...")
 
         generatedQuestions[currGenQuestionIndex] = {};
         generatedQuestions[currGenQuestionIndex].answer = returnRandomFromArray(wordList, 1)
@@ -141,7 +142,7 @@ function addNextQuestion() {
 
         setGifs(generatedQuestions[currGenQuestionIndex].answer)
     } else {
-        console.log("Questions fully generated. starting game...")
+        console.log("<> Questions fully generated. starting game...")
         questions = generatedQuestions
         start()
     }
