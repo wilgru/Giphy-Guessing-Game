@@ -12,7 +12,7 @@ function startTimer(){
       span = document.getElementById("timer-element");
       span.innerHTML = ('0' + counter ).slice(-2);
     }
-    if (counter === 0) {
+    if (counter === -1) {
         //<line of code here to save results to localStorage and redirect to lscorescreen.html>
         clearInterval(counter);
         return window.location.assign('./scorescreen.html')
