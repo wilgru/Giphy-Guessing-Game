@@ -1,67 +1,30 @@
-// testing getSynonyms() function
-// getSynonyms("book").then(data => console.log(data))
-// Variable elements
-var gifs = Array.from(document.querySelectorAll('.gifs-combo'));
-var timerElement = document.querySelector(".timer-count");
-var right = document.querySelector("right");
-var wrong = document.querySelector("wrong");
-
-// Defined by functions below
-var timerCount;
-var isWin = false;
-
-let currentQuestion = {}
-let acceptingAnswers = true
-let score = 0
-let availableQuestions = []
-
-// Based on 3 rounds of Gifs
-let Questions = [
-    {
-        question:
-        // string combo of gifs returned
-        answer:
-        // <line of code to populate word returned by wordsAPIcall>,
-    },
-    {
-        question:
-        // string combo of gifs returned
-        answer:
-        // <line of code to populate word returned by wordsAPIcall>,
-    },
-    {
-        question:
-        // string combo of gifs returned
-        answer:
-        // <line of code to populate word returned by wordsAPIcall>,
-    }
-]
-
-//constants which tell us score increments by 10 and max number of gif rounds to run within time available = 3
+//Constants which force score increments by 10 and max number of gif rounds to run within time available = 3 for now as MVP)
 const SCORE_POINTS = 10
 const MAX_QUESTIONS = 3
 
-function startTimer() {
-    var timer = setInterval(function () {
-        timerCount--;
-        timerElement.textContent = timerCount;
-        
-        if (timerCount <= 0) {
-            clearInterval(timer);
-            //line to redirect to leaderboard and score
-        }
-    },1000);
-}
 
-startGame = () => {
-    questionCounter = 0
-    score = 0
-    availableQuestions = [...questions]
-    getNewQuestion()
-    timerCount = 30;
-    timerElement.textContent = timerCount;
-    startTimer();
+// Handles timer on clicking 'START GAME'
+function startTimer(){
+  var counter = 10;
+  setInterval(function() {
+    counter--;
+    if (counter >= 0) {
+      span = document.getElementById("timer-element");
+      span.innerHTML = ('0' + counter ).slice(-2);
+    }
+    if (counter === -1) {
+        //<line of code here to save results to localStorage and redirect to lscorescreen.html>
+        clearInterval(counter);
+        return window.location.assign('./scorescreen.html')
+    }
+
+  }, 1000);
 }
+function start()
+{
+    document.getElementById("timer-element");
+    startTimer();
+};
 
 // return random word from a given list
 function returnRandomWord(wordArray) {
@@ -70,7 +33,7 @@ function returnRandomWord(wordArray) {
     return wordArray[randomIndex];
 }
 
-// return a list of synonyms for thhe parsed word
+// return a list of synonyms for the parsed word
 function getSynonyms(word) {
     var synonymsList = 
     fetch('https://wordsapiv1.p.rapidapi.com/words/'+word+'/synonyms', 
@@ -88,60 +51,67 @@ function getSynonyms(word) {
     return synonymsList;
 }
 
+// function to return gifs and populate placeholders based on getSynonyms()
+// {insert code here}
+
+
+// Handles question generation and stores and tallies correct and incorrect answers
+var gifs = Array.from(document.querySelectorAll('#question'));
+var right = document.querySelector("right");
+var wrong = document.querySelector("wrong");
+
+// Defined by functions below
+let currentQuestion = {}
+let acceptingAnswers = true
+let score = 0
+let availableQuestions = []
+
+    // // Based on 3 rounds of Gifs
+    let questions = [
+    {
+        // question:
+        // string combo of gifs returned based on synonym returned by WordsAPI call related to <chosen word>
+        // answer:
+        // <chosen word>,
+    },
+    {
+        // question:
+        // string combo of gifs returned based on synonym returned by WordsAPI call related to <chosen word>
+        // answer:
+        // <chosen word>,
+    },
+    {
+        // question:
+        // string combo of gifs returned based on synonym returned by WordsAPI call related to <chosen word>
+        // answer:
+        // <chosen word>,
+    }
+]
+
+// function to return another question and answer combo when ruser clears round
+function getNewQuestion() {
+// {insert code here}
+}
+
+
+//When all 3 questions answered, save score to leaderboard and end round
 getNewQuestion = () => {
     if(availableQuestions.length === 0 || questionCounter > MAX_QUESTIONS) {
         localStorage.setItem('mostRecentScore', score)
-        //<place here line of code to return to 'start'>
+        return window.location.assign('./scorescreen.html')
     }
 
-    const questionsIndex = Math.floor(Math.random() * availableQuestions.length)
-    currentQuestion =   availableQuestions[questionsIndex]
-    question.innerText = currentQuestion.question
+// Increment score if answer is correct
+    let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect'
 
-    choices.forEach(choice => {
-        const number = choice.dataset['number']
-        choice.innerText = currentQuestion['choice' + number]
-    })
+    if(classToApply === 'correct') {
+        incrementScore(SCORE_POINTS)
+    }
 
-    availableQuestions.splice(questionsIndex, 1)
+//When time is out, disable getNewQuestion
+    setTimeout(() => {
+        selectedChoice.parentElement.classList.remove(classToApply)
+        getNewQuestion()
 
-    acceptingAnswers = true 
+    }, 200)
 }
-
-choices.forEach(choice => {
-    choice.addEventListener('click', e => {
-        if(!acceptingAnswers) return
-
-        acceptingAnswers = false
-        const selectedChoice = e.target
-        const selectedAnswer = selectedChoice.dataset['number']
-
-        let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect'
-
-        if(classToApply === 'correct') {
-            incrementScore(SCORE_POINTS)
-            timerCount = timerCount + 2;
-        }
-
-        if(classToApply === 'incorrect') {
-            timerCount = timerCount - 2;
-        }
-
-        selectedChoice.parentElement.classList.add(classToApply)
-
-        setTimeout(() => {
-            selectedChoice.parentElement.classList.remove(classToApply)
-            getNewQuestion()
-
-        }, 200)
-
-    })
-
-})
-
-incrementScore = num => {
-    score +=num
-    scoreText.innerText = score
-}
-
-startGame()

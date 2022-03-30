@@ -19,6 +19,10 @@ th {
   color: var(--white);
 }
 
+a {
+  text-decoration:none;
+}
+
 td {
   background-color: var(--gray);
   color: var(--dark);
@@ -43,4 +47,3 @@ td {
 .giphyImage {
   margin: 1rem;
 }
-
