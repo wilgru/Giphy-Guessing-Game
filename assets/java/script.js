@@ -117,7 +117,7 @@ function getGifs(synonymWord, fallbackWord) {
 //check if the currGenQuestionGifs has been fully populated, and once it has been, move on to the next question
 function checkQuestionPopulation() {
     checkInterval = setInterval(() => {
-        if (currGenQuestionGifs.length === 4) {
+        if (currGenQuestionGifs.length === NUM_OF_GIFS_PER_QUESTION) {
             clearInterval(checkInterval)
 
             console.log('Question No.' + currGenQuestionIndex + " - COMPLETE")
