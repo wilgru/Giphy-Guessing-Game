@@ -5,36 +5,12 @@ const NUM_OF_GIFS_PER_QUESTION = 4;
 const WORDSAPI_API_KEY = API_KEYS.WORDS_API;
 const GIPHY_API_KEY = API_KEYS.GIPHY_API;
 
+//game vars
 var questions = [];
 var currentQuestion = 0;
-var currentQuestionIndex = 0;
 var acceptingAnswers = true;
-var score = 0;
+var gameTimer = 0;
 var userInput = document.getElementById("userGuess");
-
-userInput.addEventListener("keypress", function (e) {
-  if (e.key === "Enter") {
-    var userGuess = userInput.value;
-    if (userGuess === questions[currentQuestion].answer) {
-      //do something
-      console.log("correct");
-      userGuess = "";
-    } else {
-      userInput.style.boxShadow = "0px 0px 10px red";
-      userInput.value = "";
-      var countDown = 1;
-      var removeRedBorder = setInterval(function () {
-        countDown--;
-        if (countDown <= 0) {
-          userInput.style.boxShadow = "0px 0px 0px ";
-          clearInterval(removeRedBorder);
-        }
-      }, 500);
-    }
-  }
-});
-
-// var availableQuestions = []
 
 //var for generating the questions at thhe start of the game only
 var wordList = [
@@ -54,7 +30,10 @@ var currGenQuestionGifs = [];
 
 // whenn called, will begin generating the questions
 function generateQuestions() {
+  disableStartGameButton()
+
   console.log("<> Begin generating questions...");
+
   generatedQuestions = [];
   currGenQuestionGifs = [];
   currGenQuestionIndex = 0;
@@ -200,58 +179,71 @@ function addNextQuestion() {
 
 // Handles timer on clicking 'START GAME'
 function startTimer() {
-  var counter = 10;
   setInterval(function () {
-    counter++;
-    if (counter >= 0) {
+    gameTimer++;
+    if (gameTimer >= 0) {
       span = document.getElementById("timer-element");
-      span.innerHTML = ("0" + counter).slice(-2);
-    }
-    if (counter === -1) {
-      //<line of code here to save results to localStorage and redirect to lscorescreen.html>
-      clearInterval(counter);
-      return window.location.assign("./scorescreen.html");
+      span.innerHTML = ("0" + gameTimer).slice(-2);
     }
   }, 1000);
 }
 
 // start game function
 function start() {
-  document.getElementById("timer-element");
   startTimer();
+  getNewQuestion();
 }
 
 // function to return gifs and populate placeholders based on getSynonyms()
-// {insert code here}
+function renderGifs() {
 
-// Handles question generation and stores and tallies correct and incorrect answers
-var gifs = Array.from(document.querySelectorAll("#question"));
-var right = document.querySelector("right");
-var wrong = document.querySelector("wrong");
+}
+
+// 
+function clearScreen() {
+
+}
+
+// 
+function disableStartGameButton() {
+
+}
+
+//
+function setLocalStorage() {
+
+}
+
+//
+function checkEndOfGame() {
+
+}
 
 // function to return another question and answer combo when ruser clears round
 function getNewQuestion() {
-  // {insert code here}
-}
-
-//When all 3 questions answered, save score to leaderboard and end round
-getNewQuestion = () => {
-  if (availableQuestions.length === 0 || questionCounter > MAX_QUESTIONS) {
-    localStorage.setItem("mostRecentScore", score);
-    return window.location.assign("./scorescreen.html");
-  }
-
-  // Increment score if answer is correct
-  let classToApply =
-    selectedAnswer == currentQuestion.answer ? "correct" : "incorrect";
-
-  if (classToApply === "correct") {
-    incrementScore(SCORE_POINTS);
-  }
-
-  //When time is out, disable getNewQuestion
-  setTimeout(() => {
-    selectedChoice.parentElement.classList.remove(classToApply);
-    getNewQuestion();
-  }, 200);
+    currentQuestion++
+    clearScreen()
+    renderGifs()
 };
+
+userInput.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      var userGuess = userInput.value;
+      if (userGuess === questions[currentQuestion].answer) {
+        getNewQuestion()
+        console.log("correct");
+        userGuess = "";
+      } else {
+        userInput.style.boxShadow = "0px 0px 10px red";
+        userInput.value = "";
+        var countDown = 1;
+        var removeRedBorder = setInterval(function () {
+          countDown--;
+          if (countDown <= 0) {
+            userInput.style.boxShadow = "0px 0px 0px ";
+            clearInterval(removeRedBorder);
+          }
+        }, 500);
+      }
+    }
+  });
