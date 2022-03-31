@@ -39,11 +39,69 @@ td {
   color: var(--white);
 }
 
+.giphyImage {
+  margin: 1rem;
+}
+
+.bg-leaderboard {
+  background: url("../images/bg-leaderboard.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.bg-home {
+  background: url("../images/bg-home.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow: hidden;
+}
+
+.score-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(24, 24, 27, 0.8);
+  color: var(--light);
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 10px 0;
+  border: 1px solid var(--white);
+  font-size: 20px;
+}
+
 #play-again {
   background-color: var(--charcoal);
   color: var(--white);
 }
 
-.giphyImage {
-  margin: 1rem;
+#start-btn {
+  background-color: var(--charcoal);
+  color: var(--white);
+}
+
+#timer-element {
+  display: flex;
+  flex-direction: column;
+  background: rgba(24, 24, 27, 0.8);
+  color: var(--light);
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--white);
+  font-size: 20px;
+}
+
+#userGuess {
+  display: flex;
+  flex-direction: column;
+  background: rgba(24, 24, 27);
+  color: var(--light);
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--white);
+  font-size: 20px;
 }

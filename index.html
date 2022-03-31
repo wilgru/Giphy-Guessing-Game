@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="./assets/css/style.css">
     <title>GIPHY Game</title>
 </head>
-<body>
-    <button class="button-primary four columns offset-by-four" onclick="start()">START GAME</button>
+<body class="bg-home">
+    <button class="four columns offset-by-four" id="start-btn" onclick="start()">START GAME</button>
     
     <div class="container centered-box">
          
         <div class="row">
-            <div class="">
+            <div class="box-one">
                 <img class="giphyImage" src="https://via.placeholder.com/150">
             </div>
             <div class="box-two"> 
@@ -33,12 +33,12 @@
         </div>
         </div>
            
-               <input class="four columns offset-by-four" placeholder="Your guess!" id="userGuess" type="text">
+        <input class="four columns offset-by-four" placeholder="Your guess!" id="userGuess" type="text">
             
 
-            <div class="four columns offset-by-five">
-                <h1><span id="timer-element">10</span>:00</h1>
-            </div>
+        <div class="four columns offset-by-four">
+            <h1><span id="timer-element">10:00</span></h1>
+        </div>
        
     
 </body>
