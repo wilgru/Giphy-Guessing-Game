@@ -12,7 +12,7 @@ var acceptingAnswers = true;
 var gameTimer = 0;
 var userInput = document.getElementById("userGuess");
 
-//var for generating the questions at thhe start of the game only
+//vars for generating the questions at the start of the game only
 var wordList = [
   "chair",
   "car",
@@ -22,7 +22,13 @@ var wordList = [
   "machine",
   "trash",
   "baby",
-  "land",
+  "nature",
+  "sport",
+  "space",
+  "fight",
+  "happy",
+  "sad",
+  "angry"
 ];
 var generatedQuestions = [];
 var currGenQuestionIndex = 0;
@@ -209,28 +215,44 @@ function disableStartGameButton() {
 
 }
 
+// 
+function stopTimer() {
+
+}
+
 //
 function setLocalStorage() {
 
 }
 
 //
-function checkEndOfGame() {
+function promptUsersInitials() {
+    var mainBody = document.getElementById("main-container")
+    mainBody.textContent = "" // clearing everything off the screen first
+}
 
+//
+function checkEndOfGame() {
+    if (currentQuestion < MAX_QUESTIONS) {
+        getNewQuestion()
+    } else {
+        stopTimer()
+        promptUsersInitials() // else it is te end of te game, in that case prompt the user for their initials
+    }
 }
 
 // function to return another question and answer combo when ruser clears round
 function getNewQuestion() {
     currentQuestion++
-    clearScreen()
     renderGifs()
 };
 
+// 
 userInput.addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
       var userGuess = userInput.value;
       if (userGuess === questions[currentQuestion].answer) {
-        getNewQuestion()
+        checkEndOfGame()
         console.log("correct");
         userGuess = "";
       } else {
