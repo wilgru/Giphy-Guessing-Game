@@ -27,9 +27,9 @@ const incrementTimer = () => {
   seconds.innerText = pad(numberSeconds);
 }
 
-//begins timer on click
+//begins game on click
 btnStartElement.addEventListener('click', startTimer = () => {
-  start();
+  generateQuestions();
 });
 
 //disables start button on click
