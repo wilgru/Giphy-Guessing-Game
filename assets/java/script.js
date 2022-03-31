@@ -216,18 +216,6 @@ function addNextQuestion() {
   }
 }
 
-
-// function startTimer() {
-//   setInterval(function () {
-//     gameTimer++;
-//     if (gameTimer >= 0) {
-//       span = document.getElementById("timer-element");
-//       span.innerHTML = ("0" + gameTimer).slice(-2);
-//     }
-//   }, 1000);
-
-// start game function
-
 // function to return gifs and populate placeholders based on getSynonyms()
 function renderGifs() {
 
