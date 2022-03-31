@@ -10,25 +10,26 @@
     <title>GIPHY Game</title>
 </head>
 <body class="bg-home">
+    <div id="main-container">
     <button class="four columns offset-by-four" id="start-btn" onclick="start()">START GAME</button>
     
     <div class="container centered-box">
          
         <div class="row">
             <div class="box-one">
-                <img class="giphyImage" src="https://via.placeholder.com/150">
+                <img class="giphyImage" id="giphyImageOne" src="https://via.placeholder.com/150">
             </div>
             <div class="box-two"> 
-                <img class="giphyImage" src="https://via.placeholder.com/150">
+                <img class="giphyImage" id="giphyImageTwo" src="https://via.placeholder.com/150">
             </div>
         </div>
 
         <div class="row second-row">
             <div class="box-three">
-                <img class="giphyImage" src="https://via.placeholder.com/150">
+                <img class="giphyImage" id="giphyImageThree" src="https://via.placeholder.com/150">
             </div>
             <div class="box-four">
-                <img class="giphyImage" src="https://via.placeholder.com/150">
+                <img class="giphyImage" id="giphyImageFour" src="https://via.placeholder.com/150">
             </div>
         </div>
         </div>
@@ -38,6 +39,7 @@
     <div class="four columns offset-by-four">
         <h1><span id="timer-element">10:00</span></h1>
     </div>   
+</div>
     
     <script src="./assets/java/keys.js"></script>
     <script src="./assets/java/script.js"></script>
