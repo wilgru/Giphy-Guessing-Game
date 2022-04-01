@@ -1,3 +1,42 @@
+// Handles timer on clicking 'START GAME'
+const btnStartElement = document.querySelector('[data-action="start"]');
+const minutes = document.querySelector('.minutes');
+const seconds = document.querySelector('.seconds');
+let timerTime = 0;
+let interval;
+
+//Continues to call function every second
+const start = () => {
+  isRunning = true;
+  interval = setInterval(incrementTimer, 1000)
+}
+
+//Populate countup timer display
+const pad = (number) => {
+  return (number < 10) ? '0' + number : number;
+}
+
+//Icrement seconds upwards
+const incrementTimer = () => {
+  timerTime++;
+  
+  const numberMinutes = Math.floor(timerTime / 60);
+  const numberSeconds = timerTime % 60;
+  
+  minutes.innerText = pad(numberMinutes);
+  seconds.innerText = pad(numberSeconds);
+}
+
+//begins game on click
+btnStartElement.addEventListener('click', startTimer = () => {
+  generateQuestions();
+});
+
+//disables start button on click
+btnStartElement.addEventListener('click', function(event) {
+    event.target.disabled = true;
+});
+
 //Constants which force score increments by 10 and max number of gif rounds to run within time available = 3 for now as MVP)
 const SCORE_POINTS = 10;
 const MAX_QUESTIONS = 3;
@@ -175,23 +214,6 @@ function addNextQuestion() {
     questions = generatedQuestions;
     start();
   }
-}
-
-// Handles timer on clicking 'START GAME'
-function startTimer() {
-  setInterval(function () {
-    gameTimer++;
-    if (gameTimer >= 0) {
-      span = document.getElementById("timer-element");
-      span.innerHTML = ("0" + gameTimer).slice(-2);
-    }
-  }, 1000);
-}
-
-// start game function
-function start() {
-  startTimer();
-  getNewQuestion();
 }
 
 // function to return gifs and populate placeholders based on getSynonyms()
