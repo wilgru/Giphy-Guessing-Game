@@ -6,6 +6,7 @@ const startMessageEl = document.getElementById("start-message")
 const loadingMessageEl = document.getElementById("loading-message");
 const minutes = document.querySelector('.minutes');
 const seconds = document.querySelector('.seconds');
+const endCount = localStorage.getItem('endCount');
 let timerTime = 0;
 let interval;
 
@@ -44,8 +45,7 @@ btnStartElement.addEventListener('click', function(event) {
   event.target.style.display = "none";
 });
 
-//Constants which force score increments by 10 and max number of gif rounds to run within time available = 3 for now as MVP)
-const SCORE_POINTS = 10;
+//Constants which define max number of gif rounds to run within time available = 3 for now as MVP)
 const MAX_QUESTIONS = 3;
 const NUM_OF_GIFS_PER_QUESTION = 4;
 const WORDSAPI_API_KEY = API_KEYS.WORDS_API;
@@ -55,7 +55,6 @@ const GIPHY_API_KEY = API_KEYS.GIPHY_API;
 var questions = [];
 var currentQuestion = 0;
 var acceptingAnswers = true;
-var gameTimer = 0;
 var userInput = document.getElementById("userGuess");
 
 //var for generating the questions at thhe start of the game only
@@ -76,7 +75,6 @@ var currGenQuestionGifs = [];
 
 // whenn called, will begin generating the questions
 function generateQuestions() {
-  disableStartGameButton()
   renderLoadingMessage()
 
   console.log("<> Begin generating questions...");
@@ -224,6 +222,18 @@ function addNextQuestion() {
   }
 }
 
+// function to confirm endgame when max number of rounds reached
+function checkEndOfGame() {
+  if(generatedQuestions.length === 0 || currentQuestion > MAX_QUESTIONS) {
+    localStorage.setItem('endCount',score)
+  }
+}
+
+// function to save timercount timestamp to local storage
+function  saveEndCount() {
+
+}
+
 // function to return gifs and populate placeholders based on getSynonyms()
 function renderGifs() {
 
@@ -234,21 +244,10 @@ function clearScreen() {
 
 }
 
-// 
-function disableStartGameButton() {
-
-}
-
 //
 function setLocalStorage() {
 
 }
-
-//
-function checkEndOfGame() {
-
-}
-
 // display loading message
 function renderLoadingMessage() {
   loadingMessageEl.style.display = "block"
@@ -285,6 +284,7 @@ function getNewQuestion() {
   renderCurrentRoundMessage()
   clearScreen()
   renderGifs()
+  checkEndOfGame()
 };
 
 userInput.addEventListener("keypress", function (e) {
@@ -308,4 +308,4 @@ userInput.addEventListener("keypress", function (e) {
         }, 500);
       }
     }
-  });
+  }); 
