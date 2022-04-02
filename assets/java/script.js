@@ -1,5 +1,9 @@
 // Handles timer on clicking 'START GAME'
 const btnStartElement = document.querySelector('[data-action="start"]');
+const currentRoundEl = document.getElementById("current-round");
+const topContainerEl = document.getElementById("top-container");
+const startMessageEl = document.getElementById("start-message")
+const loadingMessageEl = document.getElementById("loading-message");
 const minutes = document.querySelector('.minutes');
 const seconds = document.querySelector('.seconds');
 let timerTime = 0;
@@ -9,6 +13,9 @@ let interval;
 const start = () => {
   isRunning = true;
   interval = setInterval(incrementTimer, 1000)
+  clearLoadingMessage()
+  getNewQuestion()
+  startMessage()
 }
 
 //Populate countup timer display
@@ -34,7 +41,7 @@ btnStartElement.addEventListener('click', startTimer = () => {
 
 //disables start button on click
 btnStartElement.addEventListener('click', function(event) {
-    event.target.disabled = true;
+  event.target.style.display = "none";
 });
 
 //Constants which force score increments by 10 and max number of gif rounds to run within time available = 3 for now as MVP)
@@ -70,6 +77,7 @@ var currGenQuestionGifs = [];
 // whenn called, will begin generating the questions
 function generateQuestions() {
   disableStartGameButton()
+  renderLoadingMessage()
 
   console.log("<> Begin generating questions...");
 
@@ -241,20 +249,52 @@ function checkEndOfGame() {
 
 }
 
+// display loading message
+function renderLoadingMessage() {
+  loadingMessageEl.style.display = "block"
+}
+
+// remove loading message
+function clearLoadingMessage() {
+  loadingMessageEl.style.display = "none"
+}
+
+// display start! message
+function startMessage() {
+  removeCurrentRoundMessage()
+  startMessageEl.style.display = "block"
+
+  setTimeout(() => {
+    startMessageEl.style.display = "none"
+    renderCurrentRoundMessage()
+  }, 1000)
+}
+
+// display current round
+function renderCurrentRoundMessage() {
+  currentRoundEl.style.display = "block"
+  currentRoundEl.textContent = "Round: " + (currentQuestion + 1)
+}
+
+function removeCurrentRoundMessage() {
+  currentRoundEl.style.display = "none"
+}
+
 // function to return another question and answer combo when ruser clears round
 function getNewQuestion() {
-    currentQuestion++
-    clearScreen()
-    renderGifs()
+  renderCurrentRoundMessage()
+  clearScreen()
+  renderGifs()
 };
 
 userInput.addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
       var userGuess = userInput.value;
       if (userGuess === questions[currentQuestion].answer) {
-        getNewQuestion()
         console.log("correct");
-        userGuess = "";
+        userInput.value = "";
+        currentQuestion++
+        getNewQuestion()
       } else {
         userInput.style.boxShadow = "0px 0px 10px red";
         userInput.value = "";
