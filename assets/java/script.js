@@ -44,8 +44,7 @@ btnStartElement.addEventListener('click', function(event) {
   event.target.style.display = "none";
 });
 
-//Constants which force score increments by 10 and max number of gif rounds to run within time available = 3 for now as MVP)
-const SCORE_POINTS = 10;
+//Constants which define max number of gif rounds to run within time available = 3 for now as MVP)
 const MAX_QUESTIONS = 3;
 const NUM_OF_GIFS_PER_QUESTION = 4;
 const WORDSAPI_API_KEY = API_KEYS.WORDS_API;
@@ -55,8 +54,9 @@ const GIPHY_API_KEY = API_KEYS.GIPHY_API;
 var questions = [];
 var currentQuestion = 0;
 var acceptingAnswers = true;
-var gameTimer = 0;
 var userInput = document.getElementById("userGuess");
+let timerCount = 0;
+let questionCounter = 0;
 
 //var for generating the questions at thhe start of the game only
 var wordList = [
@@ -224,6 +224,12 @@ function addNextQuestion() {
   }
 }
 
+// function to confirm endgame when max number of rounds reached
+function checkEndOfGame() {
+  if(availableQuestions.length === 0 
+    localStorage.setItem('timerCount',time)
+  }
+
 // function to return gifs and populate placeholders based on getSynonyms()
 function renderGifs() {
 
@@ -243,12 +249,6 @@ function disableStartGameButton() {
 function setLocalStorage() {
 
 }
-
-//
-function checkEndOfGame() {
-
-}
-
 // display loading message
 function renderLoadingMessage() {
   loadingMessageEl.style.display = "block"
@@ -285,6 +285,7 @@ function getNewQuestion() {
   renderCurrentRoundMessage()
   clearScreen()
   renderGifs()
+  checkEndOfGame()
 };
 
 userInput.addEventListener("keypress", function (e) {
@@ -308,4 +309,4 @@ userInput.addEventListener("keypress", function (e) {
         }, 500);
       }
     }
-  });
+  }); 
