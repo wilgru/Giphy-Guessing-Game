@@ -55,7 +55,7 @@ var questions = [];
 var currentQuestion = 0;
 var acceptingAnswers = true;
 var userInput = document.getElementById("userGuess");
-let timerCount = 0;
+let finalCount = 0;
 let questionCounter = 0;
 
 //var for generating the questions at thhe start of the game only
