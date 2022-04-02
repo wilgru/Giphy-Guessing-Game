@@ -6,6 +6,7 @@ const startMessageEl = document.getElementById("start-message")
 const loadingMessageEl = document.getElementById("loading-message");
 const minutes = document.querySelector('.minutes');
 const seconds = document.querySelector('.seconds');
+const endCount = localStorage.getItem('endCount');
 let timerTime = 0;
 let interval;
 
@@ -55,7 +56,6 @@ var questions = [];
 var currentQuestion = 0;
 var acceptingAnswers = true;
 var userInput = document.getElementById("userGuess");
-let finalCount = 0;
 let questionCounter = 0;
 
 //var for generating the questions at thhe start of the game only
@@ -76,7 +76,6 @@ var currGenQuestionGifs = [];
 
 // whenn called, will begin generating the questions
 function generateQuestions() {
-  disableStartGameButton()
   renderLoadingMessage()
 
   console.log("<> Begin generating questions...");
@@ -226,9 +225,15 @@ function addNextQuestion() {
 
 // function to confirm endgame when max number of rounds reached
 function checkEndOfGame() {
-  if(availableQuestions.length === 0 
-    localStorage.setItem('timerCount',time)
+  if(generatedQuestions.length === 0 || questionCounter > MAX_QUESTIONS) {
+    localStorage.setItem('endCount',score)
   }
+}
+
+// function to save timercount timestamp to local storage
+function  saveEndCount() {
+
+}
 
 // function to return gifs and populate placeholders based on getSynonyms()
 function renderGifs() {
@@ -237,11 +242,6 @@ function renderGifs() {
 
 // 
 function clearScreen() {
-
-}
-
-// 
-function disableStartGameButton() {
 
 }
 
