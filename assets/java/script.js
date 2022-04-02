@@ -56,7 +56,6 @@ var questions = [];
 var currentQuestion = 0;
 var acceptingAnswers = true;
 var userInput = document.getElementById("userGuess");
-let questionCounter = 0;
 
 //var for generating the questions at thhe start of the game only
 var wordList = [
@@ -225,7 +224,7 @@ function addNextQuestion() {
 
 // function to confirm endgame when max number of rounds reached
 function checkEndOfGame() {
-  if(generatedQuestions.length === 0 || questionCounter > MAX_QUESTIONS) {
+  if(generatedQuestions.length === 0 || currentQuestion > MAX_QUESTIONS) {
     localStorage.setItem('endCount',score)
   }
 }
