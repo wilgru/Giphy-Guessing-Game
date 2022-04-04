@@ -83,8 +83,6 @@ var currGenQuestionGifs = [];
 // whenn called, will begin generating the questions
 function generateQuestions() {
 
-  disableStartGameButton();
-
   renderLoadingMessage()
 
 
@@ -236,7 +234,10 @@ function addNextQuestion() {
 
 // function to confirm endgame when max number of rounds reached
 function checkEndOfGame() {
-  if(generatedQuestions.length === 0 || currentQuestion > MAX_QUESTIONS) {
+  if(generatedQuestions.length === 0 || currentQuestion === MAX_QUESTIONS) {
+    clearInterval(interval);
+  }else {
+    getNewQuestion()
   }
 }
 
@@ -249,6 +250,8 @@ function  saveEndCount() {
       score: timerTime.value
     }
 
+    
+
     newFields.classList.remove("hidden");
     swapFields.classList.add("hidden");    
 
@@ -257,10 +260,10 @@ function  saveEndCount() {
 
 // function to return gifs and populate placeholders based on getSynonyms()
 function renderGifs() {
-  imageOneEl.src = currGenQuestionGifs[0];
-  imageTwoEl.src = currGenQuestionGifs[1];
-  imageThreeEl.src = currGenQuestionGifs[2];
-  imageFourEl.src = currGenQuestionGifs[3];
+  imageOneEl.src = questions[currentQuestion].gifUrls[0];
+  imageTwoEl.src = questions[currentQuestion].gifUrls[1];
+  imageThreeEl.src = questions[currentQuestion].gifUrls[2];
+  imageFourEl.src = questions[currentQuestion].gifUrls[3];
 }
 
 //
@@ -273,25 +276,11 @@ function clearScreen() {
 
 }
 
-//
-function setLocalStorage() {
-
-
-}
 // display loading message
 function renderLoadingMessage() {
   loadingMessageEl.style.display = "block"
 }
 
-
-//
-function disableStartGameButton() {}
-
-//
-function setLocalStorage() {}
-
-//
-function checkEndOfGame() {}
 
 // function to return another question and answer combo when ruser clears round
 function getNewQuestion() {
@@ -331,7 +320,6 @@ function getNewQuestion() {
   renderCurrentRoundMessage()
   clearScreen()
   renderGifs()
-  checkEndOfGame()
 };
 
 
@@ -344,7 +332,7 @@ userInput.addEventListener("keypress", function (e) {
         console.log("correct");
         userInput.value = "";
         currentQuestion++
-        getNewQuestion()
+        checkEndOfGame()
       } else {
         userInput.style.boxShadow = "0px 0px 10px red";
         userInput.value = "";
