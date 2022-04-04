@@ -72,6 +72,10 @@ td {
   font-size: 20px;
 }
 
+.hidden {
+  display: none;
+}
+
 #play-again {
   background-color: var(--charcoal);
   color: var(--white);
@@ -129,6 +133,18 @@ td {
   color: var(--white);
   text-align: center;
   padding: 5px;
+  border-radius: 10px;
+  border: 1px solid var(--white);
+  font-size: 20px;
+}
+
+#final-username {
+  display: flex;
+  flex-direction: column;
+  background: rgba(24, 24, 27);
+  color: var(--light);
+  text-align: center;
+  padding: 20px;
   border-radius: 10px;
   border: 1px solid var(--white);
   font-size: 20px;
