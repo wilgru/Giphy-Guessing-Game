@@ -225,13 +225,22 @@ function addNextQuestion() {
 // function to confirm endgame when max number of rounds reached
 function checkEndOfGame() {
   if(generatedQuestions.length === 0 || currentQuestion > MAX_QUESTIONS) {
-    localStorage.setItem('endCount',score)
   }
 }
 
 // function to save timercount timestamp to local storage
 function  saveEndCount() {
+    var swapFields = document.getElementById("#swap");
+    var newFields = document.getElementById("final-username");
+    var user = {
+      userName: newFields.value,
+      score: timerTime.value
+    }
 
+    newFields.classList.remove("hidden");
+    swapFields.classList.add("hidden");    
+
+    localStorage.setItem("user", JSON.stringify(user))
 }
 
 // function to return gifs and populate placeholders based on getSynonyms()
@@ -241,7 +250,6 @@ function renderGifs() {
 
 // 
 function clearScreen() {
-
 }
 
 //
