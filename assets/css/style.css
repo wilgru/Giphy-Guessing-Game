@@ -20,7 +20,7 @@ th {
 }
 
 a {
-  text-decoration:none;
+  text-decoration: none;
 }
 
 td {
@@ -41,6 +41,12 @@ td {
 
 .giphyImage {
   margin: 1rem;
+  width: 200px;
+  height: auto;
+}
+
+.container {
+  align-content: center;
 }
 
 .bg-leaderboard {

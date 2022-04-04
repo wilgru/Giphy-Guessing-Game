@@ -57,6 +57,13 @@ var currentQuestion = 0;
 var acceptingAnswers = true;
 var userInput = document.getElementById("userGuess");
 
+//image elements
+
+var imageOneEl = document.getElementById("giphyImageOne");
+var imageTwoEl = document.getElementById("giphyImageTwo");
+var imageThreeEl = document.getElementById("giphyImageThree");
+var imageFourEl = document.getElementById("giphyImageFour");
+
 //var for generating the questions at thhe start of the game only
 var wordList = [
   "chair",
@@ -75,7 +82,11 @@ var currGenQuestionGifs = [];
 
 // whenn called, will begin generating the questions
 function generateQuestions() {
+
+  disableStartGameButton();
+
   renderLoadingMessage()
+
 
   console.log("<> Begin generating questions...");
 
@@ -125,7 +136,7 @@ function returnRandomGifUrl(gifArray, fallBackWord) {
   var randomIndex = Math.floor(Math.random() * gifArray.length);
 
   if (gifArray.length > 0) {
-    return gifArray[randomIndex]["url"];
+    return gifArray[randomIndex].images.original.url;
   } else {
     return "NO_GIFS_FOUND";
   }
@@ -180,6 +191,7 @@ function getGifs(synonymWord, fallbackWord) {
 
         // else return the gif data for the synonym word given since there were no problems with it
       } else {
+        console.log(gifData.data);
         return gifData.data;
       }
     });
@@ -245,20 +257,47 @@ function  saveEndCount() {
 
 // function to return gifs and populate placeholders based on getSynonyms()
 function renderGifs() {
-
+  imageOneEl.src = currGenQuestionGifs[0];
+  imageTwoEl.src = currGenQuestionGifs[1];
+  imageThreeEl.src = currGenQuestionGifs[2];
+  imageFourEl.src = currGenQuestionGifs[3];
 }
 
-// 
+//
 function clearScreen() {
+
+  imageOneEl.src = "";
+  imageTwoEl.src = "";
+  imageThreeEl.src = "";
+  imageFourEl.src = "";
+
 }
 
 //
 function setLocalStorage() {
 
+
 }
 // display loading message
 function renderLoadingMessage() {
   loadingMessageEl.style.display = "block"
+}
+
+
+//
+function disableStartGameButton() {}
+
+//
+function setLocalStorage() {}
+
+//
+function checkEndOfGame() {}
+
+// function to return another question and answer combo when ruser clears round
+function getNewQuestion() {
+  currentQuestion++;
+  clearScreen();
+  //renderGifs();
 }
 
 // remove loading message
@@ -295,7 +334,10 @@ function getNewQuestion() {
   checkEndOfGame()
 };
 
+
+// user input handler, checks with user guess is correct/ incorrect
 userInput.addEventListener("keypress", function (e) {
+
     if (e.key === "Enter") {
       var userGuess = userInput.value;
       if (userGuess === questions[currentQuestion].answer) {

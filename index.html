@@ -10,6 +10,10 @@
     <title>GIPHY Game</title>
 </head>
 <body class="bg-home">
+
+    <div id="main-container">
+    <button class="four columns offset-by-four" id="start-btn" onclick="start()">START GAME</button>
+
     <div id="top-container">
         <button class="four columns offset-by-four" id="start-btn" data-action="start">START GAME</button>
         <div id="current-round" style="display:none;" class="card four columns offset-by-four"></div>
@@ -21,19 +25,19 @@
          
         <div class="row" id="swap">
             <div class="box-one">
-                <img class="giphyImage" src="https://via.placeholder.com/150">
+                <img class="giphyImage" id="giphyImageOne" src="">
             </div>
             <div class="box-two"> 
-                <img class="giphyImage" src="https://via.placeholder.com/150">
+                <img class="giphyImage" id="giphyImageTwo" src="">
             </div>
         </div>
 
         <div class="row second-row" id="swap">
             <div class="box-three">
-                <img class="giphyImage" src="https://via.placeholder.com/150">
+                <img class="giphyImage" id="giphyImageThree" src="">
             </div>
             <div class="box-four">
-                <img class="giphyImage" src="https://via.placeholder.com/150">
+                <img class="giphyImage" id="giphyImageFour" src="">
             </div>
         </div>
         </div>
@@ -53,10 +57,14 @@
     <!-- <div class="timer">
     </div>
         <h1><span id="timer-element">10:00</span></h1>
+
+    </div>   
+</div>
+
     </div>    -->
+
     
     <script src="./assets/java/keys.js"></script>
     <script src="./assets/java/script.js"></script>
 </body>
 
-</html>
