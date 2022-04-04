@@ -1,5 +1,51 @@
-//Constants which force score increments by 10 and max number of gif rounds to run within time available = 3 for now as MVP)
-const SCORE_POINTS = 10;
+// Handles timer on clicking 'START GAME'
+const btnStartElement = document.querySelector('[data-action="start"]');
+const currentRoundEl = document.getElementById("current-round");
+const topContainerEl = document.getElementById("top-container");
+const startMessageEl = document.getElementById("start-message")
+const loadingMessageEl = document.getElementById("loading-message");
+const minutes = document.querySelector('.minutes');
+const seconds = document.querySelector('.seconds');
+const endCount = localStorage.getItem('endCount');
+let timerTime = 0;
+let interval;
+
+//Continues to call function every second
+const start = () => {
+  isRunning = true;
+  interval = setInterval(incrementTimer, 1000)
+  clearLoadingMessage()
+  getNewQuestion()
+  startMessage()
+}
+
+//Populate countup timer display
+const pad = (number) => {
+  return (number < 10) ? '0' + number : number;
+}
+
+//Icrement seconds upwards
+const incrementTimer = () => {
+  timerTime++;
+  
+  const numberMinutes = Math.floor(timerTime / 60);
+  const numberSeconds = timerTime % 60;
+  
+  minutes.innerText = pad(numberMinutes);
+  seconds.innerText = pad(numberSeconds);
+}
+
+//begins game on click
+btnStartElement.addEventListener('click', startTimer = () => {
+  generateQuestions();
+});
+
+//disables start button on click
+btnStartElement.addEventListener('click', function(event) {
+  event.target.style.display = "none";
+});
+
+//Constants which define max number of gif rounds to run within time available = 3 for now as MVP)
 const MAX_QUESTIONS = 3;
 const NUM_OF_GIFS_PER_QUESTION = 4;
 const WORDSAPI_API_KEY = API_KEYS.WORDS_API;
@@ -9,7 +55,6 @@ const GIPHY_API_KEY = API_KEYS.GIPHY_API;
 var questions = [];
 var currentQuestion = 0;
 var acceptingAnswers = true;
-var gameTimer = 0;
 var userInput = document.getElementById("userGuess");
 
 //image elements
@@ -37,7 +82,11 @@ var currGenQuestionGifs = [];
 
 // whenn called, will begin generating the questions
 function generateQuestions() {
+
   disableStartGameButton();
+
+  renderLoadingMessage()
+
 
   console.log("<> Begin generating questions...");
 
@@ -185,21 +234,25 @@ function addNextQuestion() {
   }
 }
 
-// Handles timer on clicking 'START GAME'
-function startTimer() {
-  setInterval(function () {
-    gameTimer++;
-    if (gameTimer >= 0) {
-      span = document.getElementById("timer-element");
-      span.innerHTML = ("0" + gameTimer).slice(-2);
-    }
-  }, 1000);
+// function to confirm endgame when max number of rounds reached
+function checkEndOfGame() {
+  if(generatedQuestions.length === 0 || currentQuestion > MAX_QUESTIONS) {
+  }
 }
 
-// start game function
-function start() {
-  startTimer();
-  getNewQuestion();
+// function to save timercount timestamp to local storage
+function  saveEndCount() {
+    var swapFields = document.getElementById("#swap");
+    var newFields = document.getElementById("final-username");
+    var user = {
+      userName: newFields.value,
+      score: timerTime.value
+    }
+
+    newFields.classList.remove("hidden");
+    swapFields.classList.add("hidden");    
+
+    localStorage.setItem("user", JSON.stringify(user))
 }
 
 // function to return gifs and populate placeholders based on getSynonyms()
@@ -212,11 +265,24 @@ function renderGifs() {
 
 //
 function clearScreen() {
+
   imageOneEl.src = "";
   imageTwoEl.src = "";
   imageThreeEl.src = "";
   imageFourEl.src = "";
+
 }
+
+//
+function setLocalStorage() {
+
+
+}
+// display loading message
+function renderLoadingMessage() {
+  loadingMessageEl.style.display = "block"
+}
+
 
 //
 function disableStartGameButton() {}
@@ -234,27 +300,62 @@ function getNewQuestion() {
   //renderGifs();
 }
 
+// remove loading message
+function clearLoadingMessage() {
+  loadingMessageEl.style.display = "none"
+}
+
+// display start! message
+function startMessage() {
+  removeCurrentRoundMessage()
+  startMessageEl.style.display = "block"
+
+  setTimeout(() => {
+    startMessageEl.style.display = "none"
+    renderCurrentRoundMessage()
+  }, 1000)
+}
+
+// display current round
+function renderCurrentRoundMessage() {
+  currentRoundEl.style.display = "block"
+  currentRoundEl.textContent = "Round: " + (currentQuestion + 1)
+}
+
+function removeCurrentRoundMessage() {
+  currentRoundEl.style.display = "none"
+}
+
+// function to return another question and answer combo when ruser clears round
+function getNewQuestion() {
+  renderCurrentRoundMessage()
+  clearScreen()
+  renderGifs()
+  checkEndOfGame()
+};
+
+
 // user input handler, checks with user guess is correct/ incorrect
 userInput.addEventListener("keypress", function (e) {
-  if (e.key === "Enter") {
-    var userGuess = userInput.value;
-    if (userGuess === questions[currentQuestion].answer) {
-      console.log("correct");
-      userGuess = "";
-      getNewQuestion();
 
-      //incorrect guess
-    } else {
-      userInput.style.boxShadow = "0px 0px 10px red";
-      userInput.value = "";
-      var countDown = 1;
-      var removeRedBorder = setInterval(function () {
-        countDown--;
-        if (countDown <= 0) {
-          userInput.style.boxShadow = "0px 0px 0px ";
-          clearInterval(removeRedBorder);
-        }
-      }, 500);
+    if (e.key === "Enter") {
+      var userGuess = userInput.value;
+      if (userGuess === questions[currentQuestion].answer) {
+        console.log("correct");
+        userInput.value = "";
+        currentQuestion++
+        getNewQuestion()
+      } else {
+        userInput.style.boxShadow = "0px 0px 10px red";
+        userInput.value = "";
+        var countDown = 1;
+        var removeRedBorder = setInterval(function () {
+          countDown--;
+          if (countDown <= 0) {
+            userInput.style.boxShadow = "0px 0px 0px ";
+            clearInterval(removeRedBorder);
+          }
+        }, 500);
+      }
     }
-  }
-});
+  }); 
