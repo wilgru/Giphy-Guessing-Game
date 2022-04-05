@@ -9,10 +9,8 @@
     <link rel="stylesheet" href="./assets/css/style.css">
     <title>GIPHY Game</title>
 </head>
-<body class="bg-home">
-    <header class="card">
-        <h1>Giphy Guessing Game</h1>
-    </header>
+
+<body class="bg-home" id="scroll">
 
     <div id="main-container">
 
@@ -55,12 +53,15 @@
             <input class="" id="final-username"  placeholder="Username Here" type="text">
         </div>
         <div class= "hidden" id="leaderboard-button">
-            <button class="four columns offset-by-four" id="leaderboard-button">
+            <button class="four columns" id="lb-save-btn">
+                SAVE USERNAME
+            </button>
+            <button class="centered-box four columns offset-by-four" id="leaderboard-button">
                 <a href="scorescreen.html">LEADERBOARD</a>
+            </button>
         </div>
     </div>
-    
+
     <script src="./assets/java/keys.js"></script>
     <script src="./assets/java/script.js"></script>
 </body>
-

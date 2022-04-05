@@ -166,6 +166,11 @@ td {
   color: var(--white);
 }
 
+#lb-save-btn {
+  background-color: var(--charcoal);
+  color: var(--white);
+}
+
 @media screen and (max-width: 1000px) {
   #scroll {
     overflow-y: scroll;
