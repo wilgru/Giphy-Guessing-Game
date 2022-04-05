@@ -12,46 +12,6 @@ let savedUserData = [];
 let timerTime = 0;
 let interval;
 
-//Continues to call function every second
-function start () {
-  timerContainerEl.style.display = "flex"
-  userInput.style.display = "flex"
-  isRunning = true;
-  interval = setInterval(incrementTimer, 1000);
-  clearLoadingMessage();
-  getNewQuestion();
-  startMessage("Start!", "green", "rgb(123, 202, 91)");
-};
-
-//Populate countup timer display
-const pad = (number) => {
-  return number < 10 ? "0" + number : number;
-};
-
-//Icrement seconds upwards
-const incrementTimer = () => {
-  timerTime++;
-
-  const numberMinutes = Math.floor(timerTime / 60);
-  const numberSeconds = timerTime % 60;
-
-  minutes.innerText = pad(numberMinutes);
-  seconds.innerText = pad(numberSeconds);
-};
-
-//begins game on click
-btnStartElement.addEventListener(
-  "click",
-  (startTimer = () => {
-    generateQuestions();
-  })
-);
-
-//disables start button on click
-btnStartElement.addEventListener("click", function (event) {
-  event.target.style.display = "none";
-});
-
 //Constants which define max number of gif rounds to run within time available = 3 for now as MVP)
 const MAX_QUESTIONS = 3;
 const NUM_OF_GIFS_PER_QUESTION = 4;
@@ -97,10 +57,50 @@ var user = {
   score: ""
 }
 
+//Continues to call function every second
+function start () {
+  timerContainerEl.style.display = "flex"
+  userInput.style.display = "flex"
+  isRunning = true;
+  interval = setInterval(incrementTimer, 1000);
+  clearLoadingMessage();
+  getNewQuestion();
+  startMessage("Start!", "green", "rgb(123, 202, 91)");
+};
+
+//Populate countup timer display
+function pad (number) {
+  return number < 10 ? "0" + number : number;
+};
+
+//Increment seconds upwards
+function incrementTimer () {
+  timerTime++;
+
+  const numberMinutes = Math.floor(timerTime / 60);
+  const numberSeconds = timerTime % 60;
+
+  minutes.innerText = pad(numberMinutes);
+  seconds.innerText = pad(numberSeconds);
+};
+
+//begins game on click
+btnStartElement.addEventListener(
+  "click",
+  (startTimer = () => {
+    generateQuestions();
+  })
+);
+
+//disables start button on click
+btnStartElement.addEventListener("click", function (event) {
+  event.target.style.display = "none";
+});
+
 // immediately gathers saved info to be ready for updating at end of game.
 getUserInfo();
 
-// whenn called, will begin generating the questions
+// when called, will begin generating the questions
 function generateQuestions() {
   renderLoadingMessage();
 
@@ -180,7 +180,7 @@ function setGifs(word) {
   });
 }
 
-//
+// returns the 4 gifs for the given synonym word, and if nothing returns then get the 4 gifs withh a fallback word
 function getGifs(synonymWord, fallbackWord) {
   return fetch(
     "https://api.giphy.com/v1/gifs/search?api_key=" +
@@ -250,7 +250,7 @@ function addNextQuestion() {
 
 // function to confirm endgame when max number of rounds reached
 function checkEndOfGame() {
-  if (generatedQuestions.length === 0 || currentQuestion === MAX_QUESTIONS) {
+  if (currentQuestion === MAX_QUESTIONS) {
     clearInterval(interval);
     endTransition()
   }else {
@@ -269,6 +269,7 @@ function endTransition() {
   userInput.classList.add("hidden");
   
   userInput.style.display = "none";
+  removeCurrentRoundMessage()
 
   // initiates updating array of user's data
   newFields.addEventListener("keypress", function (e){
@@ -317,7 +318,7 @@ function renderGifs() {
   imageFourEl.src = questions[currentQuestion].gifUrls[3];
 }
 
-//
+// clears all gifs off the screen
 function clearScreen() {
   imageOneEl.src = "";
   imageTwoEl.src = "";
@@ -330,7 +331,7 @@ function renderLoadingMessage() {
   loadingMessageEl.style.display = "block";
 }
 
-// function to return another question and answer combo when ruser clears round
+// function to return another question and answer combo when user clears round
 function getNewQuestion() {
   currentQuestion++;
   clearScreen();
@@ -362,6 +363,7 @@ function renderCurrentRoundMessage() {
   currentRoundEl.textContent = "Round: " + (currentQuestion + 1);
 }
 
+// removes current round message
 function removeCurrentRoundMessage() {
   currentRoundEl.style.display = "none";
 }
