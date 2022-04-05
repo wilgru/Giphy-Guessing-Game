@@ -7,6 +7,7 @@ const loadingMessageEl = document.getElementById("loading-message");
 const minutes = document.querySelector('.minutes');
 const seconds = document.querySelector('.seconds');
 const endCount = localStorage.getItem('endCount');
+let savedUserData = [];
 let timerTime = 0;
 let interval;
 
@@ -56,6 +57,10 @@ var questions = [];
 var currentQuestion = 0;
 var acceptingAnswers = true;
 var userInput = document.getElementById("userGuess");
+var swapFieldOne = document.getElementById("swap-one");
+var swapFieldTwo = document.getElementById("swap-two");
+var newFields = document.getElementById("final-username");
+var ldrBrdBtnEl = document.getElementById("leaderboard-button");
 
 //image elements
 
@@ -79,6 +84,14 @@ var wordList = [
 var generatedQuestions = [];
 var currGenQuestionIndex = 0;
 var currGenQuestionGifs = [];
+
+var user = {
+  userName: "",
+  score: ""
+}
+
+// immediately gathers saved info to be ready for updating at end of game.
+getUserInfo();
 
 // whenn called, will begin generating the questions
 function generateQuestions() {
@@ -236,26 +249,50 @@ function addNextQuestion() {
 function checkEndOfGame() {
   if(generatedQuestions.length === 0 || currentQuestion === MAX_QUESTIONS) {
     clearInterval(interval);
+    endTransition()
   }else {
     getNewQuestion()
   }
 }
 
+// function that prepares users for end-game sequence
+function endTransition() {
+  var endGameEl = document.getElementById("end-game");
+
+  endGameEl.classList.remove("hidden");
+  ldrBrdBtnEl.classList.remove("hidden");
+  swapFieldOne.classList.add("hidden");
+  swapFieldTwo.classList.add("hidden");
+  userInput.classList.add("hidden");
+  
+  
+  // initiates updating array of user's data
+  newFields.addEventListener("keypress", function (e){
+    if (e.key === "Enter") {
+      updateInfo()
+    }
+  });
+}
+
+// function that updates the new user data into existing array
+function updateInfo() {
+  user.userName += newFields.value;
+  user.score += timerTime;
+  userInfoArray.push(user);
+  console.log(user);
+  saveEndCount()
+}
+
 // function to save timercount timestamp to local storage
 function  saveEndCount() {
-    var swapFields = document.getElementById("#swap");
-    var newFields = document.getElementById("final-username");
-    var user = {
-      userName: newFields.value,
-      score: timerTime.value
-    }
+  localStorage.setItem("savedUserData", JSON.stringify(userInfoArray));
+  console.log(userInfoArray);
+}
 
-    
-
-    newFields.classList.remove("hidden");
-    swapFields.classList.add("hidden");    
-
-    localStorage.setItem("user", JSON.stringify(user))
+// function to prepare saved info for updating at end of game
+function getUserInfo() {
+  userInfoArray = JSON.parse(localStorage.getItem("savedUserData"));
+  console.log(userInfoArray);
 }
 
 // function to return gifs and populate placeholders based on getSynonyms()
