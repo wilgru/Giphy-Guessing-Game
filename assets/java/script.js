@@ -1,4 +1,5 @@
 // Handles timer on clicking 'START GAME'
+const headerEl = document.querySelector("header")
 const btnStartElement = document.querySelector('[data-action="start"]');
 const currentRoundEl = document.getElementById("current-round");
 const topContainerEl = document.getElementById("top-container");
@@ -12,11 +13,17 @@ let savedUserData = [];
 let timerTime = 0;
 let interval;
 
-//Constants which define max number of gif rounds to run within time available = 3 for now as MVP)
+//image elements
+var imageOneEl = document.getElementById("giphyImageOne");
+var imageTwoEl = document.getElementById("giphyImageTwo");
+var imageThreeEl = document.getElementById("giphyImageThree");
+var imageFourEl = document.getElementById("giphyImageFour");
+
+//Constant variables which define max number of gif rounds to run within time available = 3 for now as MVP)
 const MAX_QUESTIONS = 3;
 const NUM_OF_GIFS_PER_QUESTION = 4;
-const WORDSAPI_API_KEY = API_KEYS.WORDS_API;
-const GIPHY_API_KEY = API_KEYS.GIPHY_API;
+var WORDSAPI_API_KEY = API_KEYS.WORDS_API;
+var GIPHY_API_KEY = API_KEYS.GIPHY_API;
 
 //game vars
 var questions = [];
@@ -28,44 +35,32 @@ var swapFieldTwo = document.getElementById("swap-two");
 var newFields = document.getElementById("final-username");
 var ldrBrdBtnEl = document.getElementById("leaderboard-button");
 
-//image elements
-var imageOneEl = document.getElementById("giphyImageOne");
-var imageTwoEl = document.getElementById("giphyImageTwo");
-var imageThreeEl = document.getElementById("giphyImageThree");
-var imageFourEl = document.getElementById("giphyImageFour");
-
 //var for generating the questions at thhe start of the game only
 var wordList = [
   "celebrate",
   "excited",
-  "scary",
-  "curious",
-  "hot",
-  "cold",
-  "bored",
+  "love",
   "angry",
   "happy",
   "sad",
-  "tired"
 ];
 var generatedQuestions = [];
 var currGenQuestionIndex = 0;
 var currGenQuestionGifs = [];
-
 var user = {
   userName: "",
   score: ""
 }
 
-//Continues to call function every second
+// function that is called to start the game
 function start () {
   timerContainerEl.style.display = "flex"
   userInput.style.display = "flex"
-  isRunning = true;
+
   interval = setInterval(incrementTimer, 1000);
   clearLoadingMessage();
   getNewQuestion();
-  startMessage("Start!", "green", "rgb(123, 202, 91)");
+  tempMessage("Start!", "green", "rgb(123, 202, 91)");
 };
 
 //Populate countup timer display
@@ -73,7 +68,7 @@ function pad (number) {
   return number < 10 ? "0" + number : number;
 };
 
-//Increment seconds upwards
+// increment seconds upwards
 function incrementTimer () {
   timerTime++;
 
@@ -84,25 +79,10 @@ function incrementTimer () {
   seconds.innerText = pad(numberSeconds);
 };
 
-//begins game on click
-btnStartElement.addEventListener(
-  "click",
-  (startTimer = () => {
-    generateQuestions();
-  })
-);
-
-//disables start button on click
-btnStartElement.addEventListener("click", function (event) {
-  event.target.style.display = "none";
-});
-
-// immediately gathers saved info to be ready for updating at end of game.
-getUserInfo();
-
 // when called, will begin generating the questions
 function generateQuestions() {
   renderLoadingMessage();
+  headerEl.style.display = "none"
 
   console.log("<> Begin generating questions...");
 
@@ -124,7 +104,7 @@ function returnRandomFromArray(wordsArray, num) {
     var wordsArrayCopy = wordsArray.slice(0);
     for (let i = 0; i < num; i++) {
       randomIndex = Math.floor(Math.random() * wordsArrayCopy.length);
-      randomWordList.push(wordsArrayCopy[randomIndex]);
+      randomWordList.push(wordsArray[randomIndex]);
       wordsArrayCopy.splice(randomIndex, 1);
     }
     return randomWordList;
@@ -187,7 +167,7 @@ function getGifs(synonymWord, fallbackWord) {
       GIPHY_API_KEY +
       "&q=" +
       synonymWord +
-      "&limit=4&offset=0&rating=g&lang=en"
+      "&limit=10&offset=0&rating=g&lang=en"
   )
     .then((response) => response.json())
     .then((gifData) => {
@@ -253,6 +233,7 @@ function checkEndOfGame() {
   if (currentQuestion === MAX_QUESTIONS) {
     clearInterval(interval);
     endTransition()
+    renderCurrentEndOfGameMessage()
   }else {
     getNewQuestion()
   }
@@ -344,7 +325,7 @@ function clearLoadingMessage() {
 }
 
 // display start! message
-function startMessage(message, colour, bColour) {
+function tempMessage(message, colour, bColour) {
   removeCurrentRoundMessage();
   startMessageEl.textContent = message
   startMessageEl.style.display = "block";
@@ -368,12 +349,38 @@ function removeCurrentRoundMessage() {
   currentRoundEl.style.display = "none";
 }
 
+// display end of game message
+function renderCurrentEndOfGameMessage() {
+  startMessageEl.style.color = "green";
+  startMessageEl.style.backgroundColor = "rgb(123, 202, 91)";
+  currentRoundEl.style.display = "block";
+  currentRoundEl.textContent = "Well done! Your time is:";
+}
+
 // function to return another question and answer combo when ruser clears round
 function getNewQuestion() {
-  startMessage("Correct!", "green", "rgb(123, 202, 91)");
+  tempMessage("Correct!", "green", "rgb(123, 202, 91)");
   clearScreen();
   renderGifs();
 }
+
+// immediately gathers saved info to be ready for updating at end of game.
+getUserInfo();
+
+// EVENT LISTENERS =========================================================================
+
+//begins game on click
+btnStartElement.addEventListener(
+  "click",
+  (startTimer = () => {
+    generateQuestions();
+  })
+);
+
+//disables start button on click
+btnStartElement.addEventListener("click", function (event) {
+  event.target.style.display = "none";
+});
 
 // user input handler, checks with user guess is correct/ incorrect
 userInput.addEventListener("keypress", function (e) {
@@ -385,7 +392,7 @@ userInput.addEventListener("keypress", function (e) {
       currentQuestion++;
       checkEndOfGame();
     } else {
-      startMessage("Incorrect!", "darkred", "red")
+      tempMessage("Incorrect!", "darkred", "red")
       userInput.style.boxShadow = "0px 0px 10px red";
       userInput.value = "";
       var countDown = 1;
