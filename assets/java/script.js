@@ -280,15 +280,25 @@ function endTransition() {
 function updateInfo() {
   user.userName += newFields.value;
   user.score += timerTime;
-  userInfoArray.push(user);
-  console.log(user);
+  if (!userInfoArray) {
+    savedUserData.push(user);
+    console.log(savedUserData);
+  }else {
+    userInfoArray.push(user);
+    console.log(user);
+  }
   saveEndCount()
 }
 
 // function to save timercount timestamp to local storage
 function  saveEndCount() {
-  localStorage.setItem("savedUserData", JSON.stringify(userInfoArray));
-  console.log(userInfoArray);
+  if (!userInfoArray) {
+    localStorage.setItem("savedUserData", JSON.stringify(savedUserData));
+    console.log(savedUserData);
+  }else {
+    localStorage.setItem("savedUserData", JSON.stringify(userInfoArray));
+    console.log(userInfoArray);
+  }
 }
 
 // function to prepare saved info for updating at end of game
