@@ -64,6 +64,7 @@ var swapFieldOne = document.getElementById("swap-one");
 var swapFieldTwo = document.getElementById("swap-two");
 var newFields = document.getElementById("final-username");
 var ldrBrdBtnEl = document.getElementById("leaderboard-button");
+var saveButtonEl = document.getElementById("lb-save-btn")
 
 //image elements
 
@@ -74,16 +75,18 @@ var imageFourEl = document.getElementById("giphyImageFour");
 
 //var for generating the questions at thhe start of the game only
 var wordList = [
-  "chair",
-  "car",
-  "house",
-  "animal",
-  "book",
-  "machine",
-  "trash",
-  "baby",
-  "land",
-];
+  "celebrate",
+  "excited",
+  "scary",
+  "curious",
+  "hot",
+  "cold",
+  "bored",
+  "angry",
+  "happy",
+  "sad",
+  "tired"
+ ];
 var generatedQuestions = [];
 var currGenQuestionIndex = 0;
 var currGenQuestionGifs = [];
@@ -266,15 +269,10 @@ function endTransition() {
   swapFieldOne.classList.add("hidden");
   swapFieldTwo.classList.add("hidden");
   userInput.classList.add("hidden");
-  
-  
-  // initiates updating array of user's data
-  newFields.addEventListener("keypress", function (e){
-    if (e.key === "Enter") {
-      updateInfo()
-    }
-  });
+
+  saveButtonEl.addEventListener("click", updateInfo);
 }
+  // initiates updating array of user's data
 
 // function that updates the new user data into existing array
 function updateInfo() {
