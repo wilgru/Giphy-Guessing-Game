@@ -2,7 +2,7 @@
 const btnStartElement = document.querySelector('[data-action="start"]');
 const currentRoundEl = document.getElementById("current-round");
 const topContainerEl = document.getElementById("top-container");
-const startMessageEl = document.getElementById("start-message")
+const startMessageEl = document.getElementById("start-message");
 const loadingMessageEl = document.getElementById("loading-message");
 const minutes = document.querySelector('.minutes');
 const seconds = document.querySelector('.seconds');
@@ -14,35 +14,38 @@ let interval;
 //Continues to call function every second
 const start = () => {
   isRunning = true;
-  interval = setInterval(incrementTimer, 1000)
-  clearLoadingMessage()
-  getNewQuestion()
-  startMessage()
-}
+  interval = setInterval(incrementTimer, 1000);
+  clearLoadingMessage();
+  getNewQuestion();
+  startMessage();
+};
 
 //Populate countup timer display
 const pad = (number) => {
-  return (number < 10) ? '0' + number : number;
-}
+  return number < 10 ? "0" + number : number;
+};
 
 //Icrement seconds upwards
 const incrementTimer = () => {
   timerTime++;
-  
+
   const numberMinutes = Math.floor(timerTime / 60);
   const numberSeconds = timerTime % 60;
-  
+
   minutes.innerText = pad(numberMinutes);
   seconds.innerText = pad(numberSeconds);
-}
+};
 
 //begins game on click
-btnStartElement.addEventListener('click', startTimer = () => {
-  generateQuestions();
-});
+btnStartElement.addEventListener(
+  "click",
+  (startTimer = () => {
+    generateQuestions();
+  })
+);
 
 //disables start button on click
-btnStartElement.addEventListener('click', function(event) {
+btnStartElement.addEventListener("click", function (event) {
   event.target.style.display = "none";
 });
 
@@ -95,9 +98,7 @@ getUserInfo();
 
 // whenn called, will begin generating the questions
 function generateQuestions() {
-
-  renderLoadingMessage()
-
+  renderLoadingMessage();
 
   console.log("<> Begin generating questions...");
 
@@ -116,10 +117,11 @@ function returnRandomFromArray(wordsArray, num) {
     return wordsArray[randomIndex];
   } else {
     var randomWordList = [];
-
+    var wordsArrayCopy = wordsArray.slice(0);
     for (let i = 0; i < num; i++) {
-      randomIndex = Math.floor(Math.random() * wordsArray.length);
-      randomWordList.push(wordsArray[randomIndex]);
+      randomIndex = Math.floor(Math.random() * wordsArrayCopy.length);
+      randomWordList.push(wordsArrayCopy[randomIndex]);
+      wordsArrayCopy.splice(randomIndex, 1);
     }
     return randomWordList;
   }
@@ -247,7 +249,7 @@ function addNextQuestion() {
 
 // function to confirm endgame when max number of rounds reached
 function checkEndOfGame() {
-  if(generatedQuestions.length === 0 || currentQuestion === MAX_QUESTIONS) {
+  if (generatedQuestions.length === 0 || currentQuestion === MAX_QUESTIONS) {
     clearInterval(interval);
     endTransition()
   }else {
@@ -305,19 +307,16 @@ function renderGifs() {
 
 //
 function clearScreen() {
-
   imageOneEl.src = "";
   imageTwoEl.src = "";
   imageThreeEl.src = "";
   imageFourEl.src = "";
-
 }
 
 // display loading message
 function renderLoadingMessage() {
-  loadingMessageEl.style.display = "block"
+  loadingMessageEl.style.display = "block";
 }
-
 
 // function to return another question and answer combo when ruser clears round
 function getNewQuestion() {
@@ -328,59 +327,57 @@ function getNewQuestion() {
 
 // remove loading message
 function clearLoadingMessage() {
-  loadingMessageEl.style.display = "none"
+  loadingMessageEl.style.display = "none";
 }
 
 // display start! message
 function startMessage() {
-  removeCurrentRoundMessage()
-  startMessageEl.style.display = "block"
+  removeCurrentRoundMessage();
+  startMessageEl.style.display = "block";
 
   setTimeout(() => {
-    startMessageEl.style.display = "none"
-    renderCurrentRoundMessage()
-  }, 1000)
+    startMessageEl.style.display = "none";
+    renderCurrentRoundMessage();
+  }, 1000);
 }
 
 // display current round
 function renderCurrentRoundMessage() {
-  currentRoundEl.style.display = "block"
-  currentRoundEl.textContent = "Round: " + (currentQuestion + 1)
+  currentRoundEl.style.display = "block";
+  currentRoundEl.textContent = "Round: " + (currentQuestion + 1);
 }
 
 function removeCurrentRoundMessage() {
-  currentRoundEl.style.display = "none"
+  currentRoundEl.style.display = "none";
 }
 
 // function to return another question and answer combo when ruser clears round
 function getNewQuestion() {
-  renderCurrentRoundMessage()
-  clearScreen()
-  renderGifs()
-};
-
+  renderCurrentRoundMessage();
+  clearScreen();
+  renderGifs();
+}
 
 // user input handler, checks with user guess is correct/ incorrect
 userInput.addEventListener("keypress", function (e) {
-
-    if (e.key === "Enter") {
-      var userGuess = userInput.value;
-      if (userGuess === questions[currentQuestion].answer) {
-        console.log("correct");
-        userInput.value = "";
-        currentQuestion++
-        checkEndOfGame()
-      } else {
-        userInput.style.boxShadow = "0px 0px 10px red";
-        userInput.value = "";
-        var countDown = 1;
-        var removeRedBorder = setInterval(function () {
-          countDown--;
-          if (countDown <= 0) {
-            userInput.style.boxShadow = "0px 0px 0px ";
-            clearInterval(removeRedBorder);
-          }
-        }, 500);
-      }
+  if (e.key === "Enter") {
+    var userGuess = userInput.value;
+    if (userGuess === questions[currentQuestion].answer) {
+      console.log("correct");
+      userInput.value = "";
+      currentQuestion++;
+      checkEndOfGame();
+    } else {
+      userInput.style.boxShadow = "0px 0px 10px red";
+      userInput.value = "";
+      var countDown = 1;
+      var removeRedBorder = setInterval(function () {
+        countDown--;
+        if (countDown <= 0) {
+          userInput.style.boxShadow = "0px 0px 0px ";
+          clearInterval(removeRedBorder);
+        }
+      }, 500);
     }
-  }); 
+  }
+});
