@@ -4,6 +4,7 @@ const currentRoundEl = document.getElementById("current-round");
 const topContainerEl = document.getElementById("top-container");
 const startMessageEl = document.getElementById("start-message");
 const loadingMessageEl = document.getElementById("loading-message");
+const timerContainerEl = document.getElementById("timer-element");
 const minutes = document.querySelector('.minutes');
 const seconds = document.querySelector('.seconds');
 const endCount = localStorage.getItem('endCount');
@@ -12,12 +13,14 @@ let timerTime = 0;
 let interval;
 
 //Continues to call function every second
-const start = () => {
+function start () {
+  timerContainerEl.style.display = "flex"
+  userInput.style.display = "flex"
   isRunning = true;
   interval = setInterval(incrementTimer, 1000);
   clearLoadingMessage();
   getNewQuestion();
-  startMessage();
+  startMessage("Start!", "green", "rgb(123, 202, 91)");
 };
 
 //Populate countup timer display
@@ -67,7 +70,6 @@ var ldrBrdBtnEl = document.getElementById("leaderboard-button");
 var saveButtonEl = document.getElementById("lb-save-btn")
 
 //image elements
-
 var imageOneEl = document.getElementById("giphyImageOne");
 var imageTwoEl = document.getElementById("giphyImageTwo");
 var imageThreeEl = document.getElementById("giphyImageThree");
@@ -87,6 +89,7 @@ var wordList = [
   "sad",
   "tired"
  ];
+
 var generatedQuestions = [];
 var currGenQuestionIndex = 0;
 var currGenQuestionGifs = [];
@@ -224,9 +227,6 @@ function checkQuestionPopulation() {
       currGenQuestionIndex++;
       addNextQuestion();
     }
-    // else {
-    //     console.log('Loading Gifs for Question No.'+ currGenQuestionIndex + " - " + currGenQuestionGifs.length + "/4")
-    // }
   }, 100);
 }
 
@@ -281,7 +281,7 @@ function updateInfo() {
   if (!userInfoArray) {
     savedUserData.push(user);
     console.log(savedUserData);
-  }else {
+  } else {
     userInfoArray.push(user);
     console.log(user);
   }
@@ -289,11 +289,11 @@ function updateInfo() {
 }
 
 // function to save timercount timestamp to local storage
-function  saveEndCount() {
+function saveEndCount() {
   if (!userInfoArray) {
     localStorage.setItem("savedUserData", JSON.stringify(savedUserData));
     console.log(savedUserData);
-  }else {
+  } else {
     localStorage.setItem("savedUserData", JSON.stringify(userInfoArray));
     console.log(userInfoArray);
   }
@@ -339,9 +339,12 @@ function clearLoadingMessage() {
 }
 
 // display start! message
-function startMessage() {
+function startMessage(message, colour, bColour) {
   removeCurrentRoundMessage();
+  startMessageEl.textContent = message
   startMessageEl.style.display = "block";
+  startMessageEl.style.color = colour;
+  startMessageEl.style.backgroundColor = bColour;
 
   setTimeout(() => {
     startMessageEl.style.display = "none";
@@ -361,7 +364,7 @@ function removeCurrentRoundMessage() {
 
 // function to return another question and answer combo when ruser clears round
 function getNewQuestion() {
-  renderCurrentRoundMessage();
+  startMessage("Correct!", "green", "rgb(123, 202, 91)");
   clearScreen();
   renderGifs();
 }
@@ -376,6 +379,7 @@ userInput.addEventListener("keypress", function (e) {
       currentQuestion++;
       checkEndOfGame();
     } else {
+      startMessage("Incorrect!", "darkred", "red")
       userInput.style.boxShadow = "0px 0px 10px red";
       userInput.value = "";
       var countDown = 1;
