@@ -28,10 +28,6 @@ h1 {
   border: 1px solid var(--white);
 }
 
-header {
-
-}
-
 th {
   background-color: var(--charcoal);
   color: var(--white);
