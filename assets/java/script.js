@@ -17,7 +17,7 @@ const start = () => {
   interval = setInterval(incrementTimer, 1000);
   clearLoadingMessage();
   getNewQuestion();
-  startMessage();
+  startMessage("Start!", "green", "rgb(123, 202, 91)");
 };
 
 //Populate countup timer display
@@ -74,15 +74,17 @@ var imageFourEl = document.getElementById("giphyImageFour");
 
 //var for generating the questions at thhe start of the game only
 var wordList = [
-  "chair",
-  "car",
-  "house",
-  "animal",
-  "book",
-  "machine",
-  "trash",
-  "baby",
-  "land",
+  "celebrate",
+  "excited",
+  "scary",
+  "curious",
+  "hot",
+  "cold",
+  "bored",
+  "angry",
+  "happy",
+  "sad",
+  "tired"
 ];
 var generatedQuestions = [];
 var currGenQuestionIndex = 0;
@@ -221,9 +223,6 @@ function checkQuestionPopulation() {
       currGenQuestionIndex++;
       addNextQuestion();
     }
-    // else {
-    //     console.log('Loading Gifs for Question No.'+ currGenQuestionIndex + " - " + currGenQuestionGifs.length + "/4")
-    // }
   }, 100);
 }
 
@@ -267,7 +266,8 @@ function endTransition() {
   swapFieldTwo.classList.add("hidden");
   userInput.classList.add("hidden");
   
-  
+  userInput.style.display = "none";
+
   // initiates updating array of user's data
   newFields.addEventListener("keypress", function (e){
     if (e.key === "Enter") {
@@ -283,7 +283,7 @@ function updateInfo() {
   if (!userInfoArray) {
     savedUserData.push(user);
     console.log(savedUserData);
-  }else {
+  } else {
     userInfoArray.push(user);
     console.log(user);
   }
@@ -291,11 +291,11 @@ function updateInfo() {
 }
 
 // function to save timercount timestamp to local storage
-function  saveEndCount() {
+function saveEndCount() {
   if (!userInfoArray) {
     localStorage.setItem("savedUserData", JSON.stringify(savedUserData));
     console.log(savedUserData);
-  }else {
+  } else {
     localStorage.setItem("savedUserData", JSON.stringify(userInfoArray));
     console.log(userInfoArray);
   }
@@ -341,9 +341,12 @@ function clearLoadingMessage() {
 }
 
 // display start! message
-function startMessage() {
+function startMessage(message, colour, bColour) {
   removeCurrentRoundMessage();
+  startMessageEl.textContent = message
   startMessageEl.style.display = "block";
+  startMessageEl.style.color = colour;
+  startMessageEl.style.backgroundColor = bColour;
 
   setTimeout(() => {
     startMessageEl.style.display = "none";
@@ -363,7 +366,7 @@ function removeCurrentRoundMessage() {
 
 // function to return another question and answer combo when ruser clears round
 function getNewQuestion() {
-  renderCurrentRoundMessage();
+  startMessage("Correct!", "green", "rgb(123, 202, 91)");
   clearScreen();
   renderGifs();
 }
@@ -378,6 +381,7 @@ userInput.addEventListener("keypress", function (e) {
       currentQuestion++;
       checkEndOfGame();
     } else {
+      startMessage("Incorrect!", "darkred", "red")
       userInput.style.boxShadow = "0px 0px 10px red";
       userInput.value = "";
       var countDown = 1;
