@@ -4,6 +4,7 @@ const currentRoundEl = document.getElementById("current-round");
 const topContainerEl = document.getElementById("top-container");
 const startMessageEl = document.getElementById("start-message");
 const loadingMessageEl = document.getElementById("loading-message");
+const timerContainerEl = document.getElementById("timer-element");
 const minutes = document.querySelector('.minutes');
 const seconds = document.querySelector('.seconds');
 const endCount = localStorage.getItem('endCount');
@@ -12,7 +13,9 @@ let timerTime = 0;
 let interval;
 
 //Continues to call function every second
-const start = () => {
+function start () {
+  timerContainerEl.style.display = "flex"
+  userInput.style.display = "flex"
   isRunning = true;
   interval = setInterval(incrementTimer, 1000);
   clearLoadingMessage();
@@ -66,7 +69,6 @@ var newFields = document.getElementById("final-username");
 var ldrBrdBtnEl = document.getElementById("leaderboard-button");
 
 //image elements
-
 var imageOneEl = document.getElementById("giphyImageOne");
 var imageTwoEl = document.getElementById("giphyImageTwo");
 var imageThreeEl = document.getElementById("giphyImageThree");
