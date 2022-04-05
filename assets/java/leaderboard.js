@@ -1,27 +1,13 @@
 leaderBoardEl = document.getElementById("leader-board-content");
+savedUserData = JSON.parse(localStorage.getItem("savedUserData"));
 
-function init() {
-    getLocalstorage() // first get all data in local storage
-    renderLeaderboard() // then render thhat data to the HTML page
-}
+renderLeaderboard();
 
-// gets everything in local storage and stores it into the leaderboardArray variable
-function getLocalstorage () {
-    JSON.parse(localStorage.getItem(user)).then(data => {
-        console.log(data);
-        renderLeaderboard(data);
-    })
-}
-
-// 
-function renderLeaderboard(data) {
-    let {userName, score} = data;
-
-    data.forEach((idx) => {
-        if (idx === 0) {
-            leaderBoardEl.innerHTML = 
-            `<div class="six columns score-card">${userName}</div>
-            <div class="six columns score-card">${score}</div>`
-        }
-    })    
+// takes the savedUserData and immediately formats it to the leaderboard
+function renderLeaderboard() {
+    savedUserData.forEach(function (index) {
+        leaderBoardEl.innerHTML += 
+        `<div class="six columns score-card">${index.userName}</div>
+        <div class="six columns score-card">${index.score}</div>`
+    });
 }
