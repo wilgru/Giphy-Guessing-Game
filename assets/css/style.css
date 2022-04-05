@@ -15,8 +15,21 @@
 }
 
 h1 {
-  color: var(--white);
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--light);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  background: rgba(24, 24, 27);
+  color: var(--light);
+  text-align: center;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid var(--white);
+}
+
+header {
+
 }
 
 th {
