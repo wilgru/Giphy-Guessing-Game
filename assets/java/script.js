@@ -313,6 +313,7 @@ function endTransition() {
 
   saveButtonEl.addEventListener("click", updateInfo);
 }
+  // initiates updating array of user's data
 
 // initiates updating array of user's data
 // function that updates the new user data into existing array
