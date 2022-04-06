@@ -1,17 +1,30 @@
-// Handles timer on clicking 'START GAME'
+// DOM vars
 const headerEl = document.querySelector("header")
 const btnStartElement = document.querySelector('[data-action="start"]');
 const currentRoundEl = document.getElementById("current-round");
 const topContainerEl = document.getElementById("top-container");
-const startMessageEl = document.getElementById("start-message");
+const tempMessageEl = document.getElementById("temp-message");
 const loadingMessageEl = document.getElementById("loading-message");
+const hint = document.getElementById("hint");
+//timer DOM vars
 const timerContainerEl = document.getElementById("timer-element");
 const minutes = document.querySelector('.minutes');
 const seconds = document.querySelector('.seconds');
 const endCount = localStorage.getItem('endCount');
+// end game DOM vars
+const userInput = document.getElementById("userGuess");
+const swapFieldOne = document.getElementById("swap-one");
+const swapFieldTwo = document.getElementById("swap-two");
+const newFields = document.getElementById("final-username");
+const ldrBrdBtnEl = document.getElementById("leaderboard-button");
+const saveButtonEl = document.getElementById("lb-save-btn");
+
+// end game saved user data vars
 let savedUserData = [];
-let timerTime = 0;
-let interval;
+var user = {
+  userName: "",
+  score: ""
+}
 
 //image elements
 var imageOneEl = document.getElementById("giphyImageOne");
@@ -29,28 +42,60 @@ var GIPHY_API_KEY = API_KEYS.GIPHY_API;
 var questions = [];
 var currentQuestion = 0;
 var acceptingAnswers = true;
-var userInput = document.getElementById("userGuess");
-var swapFieldOne = document.getElementById("swap-one");
-var swapFieldTwo = document.getElementById("swap-two");
-var newFields = document.getElementById("final-username");
-var ldrBrdBtnEl = document.getElementById("leaderboard-button");
+var incorrect = 0;
+var timerTime = 0;
+var interval;
 
 //var for generating the questions at thhe start of the game only
 var wordList = [
-  "celebrate",
+  "sleep",
   "excited",
-  "love",
   "angry",
   "happy",
   "sad",
+  "eat",
+  "lonely",
+  "bread",
+  "book",
+  "baby",
+  "person",
+  "kind"
+];
+var excludeWordsList = [
+  "well-chosen",
+  "mad",
+  "emotional",
+  "frantic",
+  "exhaust",
+  "corrode",
+  "rust",
+  "run through",
+  "use up",
+  "volume",
+  "spoil",
+  "variety",
+  "eternal rest",
+  "eternal sleep",
+  "bible",
+  "christian bible",
+  "good book",
+  "holy scripture",
+  "holy writ",
+  "scripture",
+  "word",
+  "word of god",
+  "rule book",
+  "hold",
+  "reserve",
+  "al-qur'an",
+  "koran",
+  "quran",
+  "record",
+  "record book",
 ];
 var generatedQuestions = [];
 var currGenQuestionIndex = 0;
 var currGenQuestionGifs = [];
-var user = {
-  userName: "",
-  score: ""
-}
 
 // function that is called to start the game
 function start () {
@@ -60,7 +105,7 @@ function start () {
   interval = setInterval(incrementTimer, 1000);
   clearLoadingMessage();
   getNewQuestion();
-  tempMessage("Start!", "green", "rgb(123, 202, 91)");
+  tempMessage("Start!", "green", "rgb(123, 202, 91)", renderCurrentRoundMessage);
 };
 
 //Populate countup timer display
@@ -95,17 +140,30 @@ function generateQuestions() {
 // return random/s word from a given list
 function returnRandomFromArray(wordsArray, num) {
   var randomIndex;
+  var randomWord;
 
   if (num === 1) {
-    randomIndex = Math.floor(Math.random() * wordsArray.length);
-    return wordsArray[randomIndex];
+    while(randomWord === undefined) {
+      randomIndex = Math.floor(Math.random() * wordsArray.length);
+      randomWord = wordsArray[randomIndex]
+
+      if (!excludeWordsList.includes(randomWord)) {
+        return randomWord;
+      }
+    }
+
   } else {
     var randomWordList = [];
-    var wordsArrayCopy = wordsArray.slice(0);
-    for (let i = 0; i < num; i++) {
-      randomIndex = Math.floor(Math.random() * wordsArrayCopy.length);
-      randomWordList.push(wordsArray[randomIndex]);
-      wordsArrayCopy.splice(randomIndex, 1);
+
+    while(randomWordList.length < num) {
+      randomIndex = Math.floor(Math.random() * wordsArray.length);
+      randomWord = wordsArray[randomIndex]
+
+      if (!excludeWordsList.includes(randomWord)) {
+        randomWordList.push(randomWord);
+      } else {
+        console.log("BAD SYNONYM. TRYING AGAIN...")
+      }
     }
     return randomWordList;
   }
@@ -142,8 +200,9 @@ function returnRandomGifUrl(gifArray, fallBackWord) {
 // fetch gifs from giphyAPI, and store 4 random gifs into the current question that is being generated
 function setGifs(word) {
   getSynonyms(word).then((synonymData) => {
+    var arrayWithOgWord = synonymData.concat([word, word])
     var randomSynonyms = returnRandomFromArray(
-      synonymData,
+      arrayWithOgWord,
       NUM_OF_GIFS_PER_QUESTION
     );
 
@@ -160,14 +219,14 @@ function setGifs(word) {
   });
 }
 
-// returns the 4 gifs for the given synonym word, and if nothing returns then get the 4 gifs withh a fallback word
+// returns an array of gifs for the given synonym word, and an empty array returns, then get an array of gifs withh a fallback word
 function getGifs(synonymWord, fallbackWord) {
   return fetch(
     "https://api.giphy.com/v1/gifs/search?api_key=" +
       GIPHY_API_KEY +
       "&q=" +
       synonymWord +
-      "&limit=10&offset=0&rating=g&lang=en"
+      "&limit=12&offset=0&rating=g&lang=en"
   )
     .then((response) => response.json())
     .then((gifData) => {
@@ -188,7 +247,6 @@ function getGifs(synonymWord, fallbackWord) {
 
         // else return the gif data for the synonym word given since there were no problems with it
       } else {
-        console.log(gifData.data);
         return gifData.data;
       }
     });
@@ -223,6 +281,7 @@ function addNextQuestion() {
     setGifs(generatedQuestions[currGenQuestionIndex].answer);
   } else {
     console.log("<> Questions fully generated. starting game...");
+    console.log(""); // empty line 
     questions = generatedQuestions;
     start();
   }
@@ -233,7 +292,7 @@ function checkEndOfGame() {
   if (currentQuestion === MAX_QUESTIONS) {
     clearInterval(interval);
     endTransition()
-    renderCurrentEndOfGameMessage()
+    tempMessage("Finished!", "green", "rgb(123, 202, 91)", renderCurrentEndOfGameMessage)
   }else {
     getNewQuestion()
   }
@@ -252,16 +311,13 @@ function endTransition() {
   userInput.style.display = "none";
   removeCurrentRoundMessage()
 
-  // initiates updating array of user's data
-  newFields.addEventListener("keypress", function (e){
-    if (e.key === "Enter") {
-      updateInfo()
-    }
-  });
+  saveButtonEl.addEventListener("click", updateInfo);
 }
 
+// initiates updating array of user's data
 // function that updates the new user data into existing array
 function updateInfo() {
+  tempMessage("Saved!", "green", "rgb(123, 202, 91)", renderCurrentEndOfGameMessage)
   user.userName += newFields.value;
   user.score += timerTime;
   if (!userInfoArray) {
@@ -307,11 +363,6 @@ function clearScreen() {
   imageFourEl.src = "";
 }
 
-// display loading message
-function renderLoadingMessage() {
-  loadingMessageEl.style.display = "block";
-}
-
 // function to return another question and answer combo when user clears round
 function getNewQuestion() {
   currentQuestion++;
@@ -319,23 +370,28 @@ function getNewQuestion() {
   //renderGifs();
 }
 
+// display a message temporarily, and then displays another message when its done
+function tempMessage(message, colour, bColour, postTempMessageFunc) {
+  removeCurrentRoundMessage();
+  tempMessageEl.textContent = message
+  tempMessageEl.style.display = "block";
+  tempMessageEl.style.color = colour;
+  tempMessageEl.style.backgroundColor = bColour;
+
+  setTimeout(() => {
+    tempMessageEl.style.display = "none";
+    postTempMessageFunc()
+  }, 1000);
+}
+
+// display loading message
+function renderLoadingMessage() {
+  loadingMessageEl.style.display = "block";
+}
+
 // remove loading message
 function clearLoadingMessage() {
   loadingMessageEl.style.display = "none";
-}
-
-// display start! message
-function tempMessage(message, colour, bColour) {
-  removeCurrentRoundMessage();
-  startMessageEl.textContent = message
-  startMessageEl.style.display = "block";
-  startMessageEl.style.color = colour;
-  startMessageEl.style.backgroundColor = bColour;
-
-  setTimeout(() => {
-    startMessageEl.style.display = "none";
-    renderCurrentRoundMessage();
-  }, 1000);
 }
 
 // display current round
@@ -351,24 +407,22 @@ function removeCurrentRoundMessage() {
 
 // display end of game message
 function renderCurrentEndOfGameMessage() {
-  startMessageEl.style.color = "green";
-  startMessageEl.style.backgroundColor = "rgb(123, 202, 91)";
   currentRoundEl.style.display = "block";
   currentRoundEl.textContent = "Well done! Your time is:";
 }
 
 // function to return another question and answer combo when ruser clears round
 function getNewQuestion() {
-  tempMessage("Correct!", "green", "rgb(123, 202, 91)");
+  tempMessage("Correct!", "green", "rgb(123, 202, 91)", renderCurrentRoundMessage);
   clearScreen();
   renderGifs();
+  console.log("Psst! Round " + (currentQuestion + 1) + " Answer: '" + questions[currentQuestion].answer + "'")
 }
 
 // immediately gathers saved info to be ready for updating at end of game.
 getUserInfo();
 
-// EVENT LISTENERS =========================================================================
-
+// EVENT LISTENERS ==============================================================================================
 //begins game on click
 btnStartElement.addEventListener(
   "click",
@@ -387,14 +441,23 @@ userInput.addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
     var userGuess = userInput.value;
     if (userGuess === questions[currentQuestion].answer) {
-      console.log("correct");
       userInput.value = "";
       currentQuestion++;
+
+      incorrect = 0;
+      hint.classList.add("hidden")
       checkEndOfGame();
+
     } else {
-      tempMessage("Incorrect!", "darkred", "red")
-      userInput.style.boxShadow = "0px 0px 10px red";
+      tempMessage("Incorrect!", "darkred", "red", renderCurrentRoundMessage)
       userInput.value = "";
+
+      incorrect++
+      if (incorrect >= 3) {
+        hint.classList.remove("hidden")
+      }
+
+      userInput.style.boxShadow = "0px 0px 10px red";
       var countDown = 1;
       var removeRedBorder = setInterval(function () {
         countDown--;
