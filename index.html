@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./assets/css/reset.css"> <!-- move this down -->
+    <link href="./assets/css/reset.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;400;700;900&family=Manrope:wght@200;400;700&family=Space+Grotesk:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
     <link rel="stylesheet" href="./assets/css/style.css">
-    <title>GIPHY Game</title>
+    <title>GIPHY Guessing Game</title>
 </head>
+
 <body class="bg-home">
     <header>
-        <h1>Giphy Guessing Game</h1>
+        <h1 class="six columns offset-by-three">Giphy Guessing Game</h1>
     </header>
 
     <div id="main-container">
@@ -22,8 +23,8 @@
     <div id="top-container">
         <button class="four columns offset-by-four" id="start-btn" data-action="start">START GAME</button>
         <div id="current-round" style="display:none;" class="card four columns offset-by-four"></div>
-        <div id="loading-message" style="display:none;" class="card four columns offset-by-four">Loading...</div>
-        <div id="start-message" style="display:none;" class="card four columns offset-by-four">Start!</div>
+        <div id="loading-message" style="display:none;" class="card four columns offset-by-four">The game will start shortly...</div>
+        <div id="temp-message" style="display:none;" class="card four columns offset-by-four"></div>
     </div>
     
     <div class="container centered-box">
@@ -47,23 +48,28 @@
         </div>
         </div>
            
-        <input class="four columns offset-by-four" placeholder="Your guess!" id="userGuess" type="text">
+        <input class="four columns offset-by-four" placeholder="Your guess! (Press enter to submit)" id="userGuess" type="text">
             
     <div class="four columns offset-by-four">
+        <p id="hint" class="hidden">Stuck? You can check the console for the answer, but you didn't hear that from me...</p>
         <div id="timer-element">
             <h2><span class="minutes">00</span>:<span class="seconds">00</span></h2>
         </div>
+        
         <!-- input field for player's username to be hidden until game ends for use in leaderboard -->
         <div class= "centered-box hidden" id="end-game">
             <input class="" id="final-username"  placeholder="Username Here" type="text">
         </div>
         <div class= "hidden" id="leaderboard-button">
-            <button class="four columns offset-by-four" id="leaderboard-button">
+            <button class="centered-box four columns" id="lb-save-btn">
+                SAVE SCORE
+            </button>
+            <button class="centered-box four columns offset-by-four" id="leaderboard-button">
                 <a href="scorescreen.html">LEADERBOARD</a>
+            </button>
         </div>
     </div>
-    
+
     <script src="./assets/java/keys.js"></script>
     <script src="./assets/java/script.js"></script>
 </body>
-
