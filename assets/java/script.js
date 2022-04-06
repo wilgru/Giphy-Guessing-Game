@@ -55,10 +55,10 @@ var wordList = [
   "sad",
   "eat",
   "lonely",
-  "bread",
+  "movie",
   "book",
   "baby",
-  "person",
+  "human",
   "kind"
 ];
 var excludeWordsList = [
@@ -92,6 +92,9 @@ var excludeWordsList = [
   "quran",
   "record",
   "record book",
+  "pic",
+  "picture",
+  "flick"
 ];
 var generatedQuestions = [];
 var currGenQuestionIndex = 0;
