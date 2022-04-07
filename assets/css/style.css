@@ -15,8 +15,17 @@
 }
 
 h1 {
-  color: var(--white);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 400;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  background: rgba(24, 24, 27);
+  color: rgb(228, 169, 255);
+  text-align: center;
+  padding: 5px;
+  border-radius: 20px;
+  border: 4px solid rgb(228, 169, 255);
 }
 
 th {
@@ -57,9 +66,9 @@ td {
 .bg-leaderboard {
   background: url("../images/bg-leaderboard.jpg");
   background-repeat: no-repeat;
+  background-attachment: fixed;
   background-position: center;
   background-size: cover;
-  overflow: hidden;
   height: 100vh;
 }
 
@@ -79,6 +88,18 @@ td {
   padding: 20px;
   border-radius: 10px;
   margin: 10px 0;
+  border: 1px solid var(--white);
+  font-size: 20px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(24, 24, 27);
+  color: var(--light);
+  text-align: center;
+  padding: 5px;
+  border-radius: 10px;
   border: 1px solid var(--white);
   font-size: 20px;
 }
@@ -109,6 +130,13 @@ td {
   font-size: 20px;
 }
 
+#hint {
+  color: rgb(255 247 102);
+  font-style: italic;
+  background-color: rgba(0, 0, 0, 60%);
+  border-radius: 5px;
+}
+
 #userGuess {
   display: none;
   flex-direction: column;
@@ -125,28 +153,14 @@ td {
   height: 50px;
 }
 
-.card {
-  display: flex;
-  flex-direction: column;
-  background: rgba(24, 24, 27);
-  color: var(--light);
-  text-align: center;
-  padding: 5px;
-  border-radius: 10px;
-  border: 1px solid var(--white);
-  font-size: 20px;
+#temp-message {
+  background: rgb(123, 202, 91);
+  color: green;
 }
 
-#start-message {
-  display: flex;
-  flex-direction: column;
-  background: rgb(123, 202, 91);
-  color: var(--white);
-  text-align: center;
-  padding: 5px;
-  border-radius: 10px;
-  border: 1px solid var(--white);
-  font-size: 20px;
+#loading-message {
+  background: rgb(255, 247, 102);
+  color: darkgoldenrod;
 }
 
 #final-username {
