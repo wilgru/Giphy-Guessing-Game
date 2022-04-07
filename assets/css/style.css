@@ -77,6 +77,8 @@ td {
   background-repeat: no-repeat;
   background-position: center;
   overflow: hidden;
+  height: 100vh;
+  margin-top: 64px;
 }
 
 .score-card {
